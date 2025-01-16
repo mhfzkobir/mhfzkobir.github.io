@@ -1,5 +1,5 @@
 // Import channels from an M3U file
-const m3uUrl = 'https://denverisalive.vercel.app/Playlist/TATA_TV6.m3u'; // Replace with your M3U file URL
+const m3uUrl = 'https://raw.githubusercontent.com/MohammadKobirShah/KobirIPTV/refs/heads/main/KobirIPTV.m3u'; // Replace with your M3U file URL
 
 let channels = [];
 const channelContainer = document.getElementById('channel-container');
@@ -41,7 +41,7 @@ function displayChannels(channelList) {
       <h3>${channel.name}</h3>
     `;
     card.addEventListener('click', () => {
-      window.open(channel.url, '_blank');
+      playChannel(channel.url, channel.name);
     });
     channelContainer.appendChild(card);
   });
@@ -57,6 +57,34 @@ function populateCategories() {
     option.textContent = category;
     categorySelect.appendChild(option);
   });
+}
+
+// Play channel in a new window using JW Player
+function playChannel(url, title) {
+  const newWindow = window.open('', '_blank', 'width=800,height=600');
+  newWindow.document.write(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${title}</title>
+      <script src="https://cdn.jwplayer.com/libraries/IDzF9Zmk.js"></script>
+    </head>
+    <body style="margin:0;padding:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#000;">
+      <div id="player"></div>
+      <script>
+        const player = jwplayer("player");
+        player.setup({
+          file: "${url}",
+          width: "100%",
+          height: "100%",
+          autostart: true
+        });
+      </script>
+    </body>
+    </html>
+  `);
 }
 
 // Search functionality

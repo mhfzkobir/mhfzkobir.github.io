@@ -35,8 +35,21 @@ header input, header select {
   font-size: 14px;
 }
 
+/* Player */
+#player-container {
+  width: 100%;
+  height: 400px;
+  background: black;
+  margin-bottom: 20px;
+}
+
+#player {
+  width: 100%;
+  height: 100%;
+}
+
 /* Channel Grid */
-main.grid-view {
+.grid-view {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
@@ -56,6 +69,13 @@ main.grid-view {
 .card:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+  max-width: 100%;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
 }
 
 .card h3 {

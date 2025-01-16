@@ -3,24 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live TV</title>
+  <title>Live TV - Modern</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>Live TV</h1>
-    <input type="text" id="search" placeholder="Search channels..." />
-    <select id="category">
-      <option value="all">All Categories</option>
-    </select>
+    <div class="logo">📺 Live TV</div>
+    <div class="search-container">
+      <input type="text" id="search" placeholder="Search channels..." />
+      <select id="category">
+        <option value="all">All Categories</option>
+      </select>
+    </div>
   </header>
 
   <main id="channel-container" class="grid-view">
-    <!-- Channels will be dynamically loaded here -->
+    <!-- Channels will load here dynamically -->
   </main>
 
   <footer>
-    <p>&copy; 2025 Live TV Platform</p>
+    <p>© 2025 Live TV Platform | Built with ❤️</p>
   </footer>
 
   <script src="app.js"></script>

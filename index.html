@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live TV - Modern</title>
+  <title>Live TV - Enhanced</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://ssl.p.jwpcdn.com/player/v/8.26.8/jwplayer.js"></script>
 </head>
 <body>
   <header>
@@ -17,8 +18,13 @@
     </div>
   </header>
 
-  <main id="channel-container" class="grid-view">
-    <!-- Channels will load here dynamically -->
+  <main>
+    <div id="player-container">
+      <div id="player"></div>
+    </div>
+    <div id="channel-container" class="grid-view">
+      <!-- Channels will load here dynamically -->
+    </div>
   </main>
 
   <footer>

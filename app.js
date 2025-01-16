@@ -1,10 +1,13 @@
-// Import channels from an M3U file
 const m3uUrl = 'https://raw.githubusercontent.com/MohammadKobirShah/KobirIPTV/refs/heads/main/KobirIPTV.m3u'; // Replace with your M3U file URL
 
 let channels = [];
+const playerContainer = document.getElementById('player-container');
+const playerDiv = document.getElementById('player');
 const channelContainer = document.getElementById('channel-container');
 const searchInput = document.getElementById('search');
 const categorySelect = document.getElementById('category');
+
+let player; // JW Player instance
 
 // Fetch and parse M3U file
 async function fetchChannels() {
@@ -17,18 +20,28 @@ async function fetchChannels() {
 function parseM3U(m3uContent) {
   const lines = m3uContent.split('\n');
   let currentChannel = {};
-  
+
   lines.forEach((line) => {
     if (line.startsWith('#EXTINF')) {
-      const info = line.split(',')[1];
-      currentChannel = { name: info, url: null, category: 'Uncategorized' };
+      const matchGroup = line.match(/group-title="([^"]+)"/);
+      const matchLogo = line.match(/tvg-logo="([^"]+)"/);
+      const channelName = line.split(',').pop();
+
+      currentChannel = {
+        name: channelName.trim(),
+        url: null,
+        category: matchGroup ? matchGroup[1] : 'Uncategorized',
+        logo: matchLogo ? matchLogo[1] : null,
+      };
     } else if (line.trim() && !line.startsWith('#')) {
       currentChannel.url = line.trim();
       channels.push(currentChannel);
     }
   });
+
   displayChannels(channels);
   populateCategories();
+  initializePlayer(); // Initialize JW Player
 }
 
 // Display channels in grid view
@@ -38,11 +51,10 @@ function displayChannels(channelList) {
     const card = document.createElement('div');
     card.classList.add('card');
     card.innerHTML = `
+      ${channel.logo ? `<img src="${channel.logo}" alt="${channel.name} Logo">` : ''}
       <h3>${channel.name}</h3>
     `;
-    card.addEventListener('click', () => {
-      playChannel(channel.url, channel.name);
-    });
+    card.addEventListener('click', () => playChannel(channel.url));
     channelContainer.appendChild(card);
   });
 }
@@ -59,36 +71,27 @@ function populateCategories() {
   });
 }
 
-// Play channel in a full-window JW Player instance
-function playChannel(url, title) {
-  const newWindow = window.open('', '_blank', 'width=100%,height=100%');
-  newWindow.document.write(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>${title}</title>
-      <script src="https://cdn.jwplayer.com/libraries/IDzF9Zmk.js"></script>
-    </head>
-    <body style="margin:0;padding:0;background:#000;">
-      <div id="player" style="width:100%;height:100vh;"></div>
-      <script>
-        const player = jwplayer("player");
-        player.setup({
-          file: "${url}",
-          width: "100%",
-          height: "100%",
-          controls: true,
-          autostart: true,
-          skin: {
-            name: "seven", // Choose a modern JW Player skin
-          }
-        });
-      </script>
-    </body>
-    </html>
-  `);
+// Play channel in JW Player
+function playChannel(url) {
+  if (player) {
+    player.load([{ file: url }]);
+    player.play();
+  }
+}
+
+// Initialize JW Player
+function initializePlayer() {
+  player = jwplayer('player');
+  player.setup({
+    file: '',
+    width: '100%',
+    height: '100%',
+    controls: true,
+    autostart: false,
+    skin: {
+      name: 'seven',
+    },
+  });
 }
 
 // Search functionality

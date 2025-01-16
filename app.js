@@ -59,9 +59,9 @@ function populateCategories() {
   });
 }
 
-// Play channel in a new window using JW Player
+// Play channel in a full-window JW Player instance
 function playChannel(url, title) {
-  const newWindow = window.open('', '_blank', 'width=800,height=600');
+  const newWindow = window.open('', '_blank', 'width=100%,height=100%');
   newWindow.document.write(`
     <!DOCTYPE html>
     <html lang="en">
@@ -71,15 +71,19 @@ function playChannel(url, title) {
       <title>${title}</title>
       <script src="https://cdn.jwplayer.com/libraries/IDzF9Zmk.js"></script>
     </head>
-    <body style="margin:0;padding:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#000;">
-      <div id="player"></div>
+    <body style="margin:0;padding:0;background:#000;">
+      <div id="player" style="width:100%;height:100vh;"></div>
       <script>
         const player = jwplayer("player");
         player.setup({
           file: "${url}",
           width: "100%",
           height: "100%",
-          autostart: true
+          controls: true,
+          autostart: true,
+          skin: {
+            name: "seven", // Choose a modern JW Player skin
+          }
         });
       </script>
     </body>
